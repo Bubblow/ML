@@ -15,7 +15,7 @@ from sklearn.metrics import accuracy_score
 # In[ ]:
 
 
-data = pd.read_csv('data.csv')
+data = pd.read_csv('/home/ubuntu/ML/data.csv')
 data = data.dropna()
 
 
