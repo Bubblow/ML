@@ -4,6 +4,22 @@ import pickle
 import pandas as pd
 import numpy as np
 from pydantic import BaseModel
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://b39662bf227e7a1a12555a8ce9cbd840@o4506983382188032.ingest.us.sentry.io/4506983385202688",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
+
+
+
+
 
 with open("model_and_vectorizer.dump", "rb")as f:
     loaded_data = pickle.load(f)
@@ -35,3 +51,8 @@ async def predict_tf(x: Politics):
 @app.get('/')
 async def root():
     return {"message": "online"}
+
+
+@app.get("/sentry-debug")
+async def trigger_error():
+    division_by_zero = 1 / 0
