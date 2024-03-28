@@ -31,16 +31,15 @@ class Politics(BaseModel):
 
 # 새 데이터의 '제목'과 '내용'을 결합
 
-
-
 @app.post("/predict", status_code=200)
 async def predict_tf(x: Politics):
-    new_data = pd.DataFrame({"제목": [x.title], "내용": [x.content]})
-    X_new = new_data['제목'] + ' ' + new_data['내용']
-    X_new_tfidf = loaded_vectorizer.transform(X_new)
-    res= loaded_model.predict(X_new_tfidf)
+    # '제목'과 '내용'을 하나의 문자열로 결합하여 리스트에 넣은 후 DataFrame 생성
+    new_data = pd.DataFrame({"data": [x.title + ' ' + x.content]})
+    X_new_tfidf = loaded_vectorizer.transform(new_data['data'])
+    res = loaded_model.predict(X_new_tfidf)
     
-    return {"prediction": res}
+    return {"prediction": res.tolist()}
+
 
 @app.get('/')
 async def root():
