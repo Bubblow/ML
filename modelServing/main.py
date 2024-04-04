@@ -37,8 +37,8 @@ async def predict_tf(x: Politics):
     new_data = pd.DataFrame({"data": [x.title + ' ' + x.content]})
     X_new_tfidf = loaded_vectorizer.transform(new_data['data'])
     res = loaded_model.predict(X_new_tfidf)
-    
-    return {"prediction": res.tolist()}
+    percentage = loaded_model.predict_proba(X_new_tfidf)
+    return {"prediction": res.tolist(), "percentage": percentage}
 
 
 @app.get('/')
